@@ -44,20 +44,34 @@ body {
     border-radius: 0.5rem;
     // center translate:
     transform: translate(-50%, -50%);
+    transition: all 0.2s ease-in-out;
   }
 
   &-point {
     position: absolute;
     top: 10px;
-    font-size: 2rem;
+    font-size: 1.4rem;
     font-weight: 500;
+    transition: all 0.2s ease-in-out;
     transform: translateX(50%);
+    opacity: 0.7;
   }
 
   &-min {
     font-size: 1.2rem;
     font-weight: 500;
   }
+
+  &-active {
+    color: darken($deltaGreen, 10%);
+    font-weight: 700;
+    font-size: 1.7rem;
+    opacity: 1;
+  }
+}
+
+.remains {
+  opacity: 0.7;
 }
 
 .reset-btn {
@@ -72,3 +86,29 @@ body {
     color: #fff;
   }
 }
+
+.github-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: $deltaGreen;
+  color: #fff;
+
+  &:hover {
+    background-color: darken($deltaGreen, 5%);
+    color: #fff;
+  }
+}
+
+// .theme-btn {
+//   position: absolute;
+//   top: 10px;
+//   left: 10px;
+//   background-color: $deltaGreen;
+//   color: #fff;
+
+//   &:hover {
+//     background-color: darken($deltaGreen, 5%);
+//     color: #fff;
+//   }
+// }

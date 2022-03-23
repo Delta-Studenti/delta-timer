@@ -1,35 +1,14 @@
+import classNames from "classnames";
 import React, { useEffect } from "react";
 import { useTimer } from "react-timer-hook";
-
-interface IMilestone {
-  minutes: number;
-  text: string;
-}
-
-const timerMinutes = 15;
-
-const milestones: IMilestone[] = [
-  {
-    minutes: 5,
-    text: "Dotazy",
-  },
-  {
-    minutes: 15,
-    text: "Prezentace",
-  },
-];
-
-const formatTwoDigits = (value: number) => {
-  return value < 10 ? `0${value}` : value;
-};
-
-const getPercentage = (currentMinutes: number, currentSeconds: number) => {
-  return ((currentMinutes * 60 + currentSeconds) / (timerMinutes * 60)) * 100;
-};
-
-const getMilestonePercentage = (milestoneMinutes: number) => {
-  return 100 - (milestoneMinutes / timerMinutes) * 100;
-};
+import { sortedMilestones, timerMinutes } from "../src/config";
+import {
+  formatTwoDigits,
+  getMilestonePercentage,
+  getMilestonePercentage2,
+  getPercentage,
+} from "../src/helper-func";
+import Milestone from "./milestone";
 
 const Timer: React.FC = () => {
   const { seconds, minutes, isRunning, restart } = useTimer({
@@ -47,6 +26,8 @@ const Timer: React.FC = () => {
     }
   }, [isRunning]);
 
+  const currentPercent = getPercentage(minutes, seconds);
+
   return (
     <div
       className="d-flex flex-column align-items-center justify-content-center"
@@ -55,37 +36,39 @@ const Timer: React.FC = () => {
       <button className="btn reset-btn" onClick={runTimer}>
         Restart
       </button>
+      <a
+        href="https://github.com/Delta-Studenti/delta-timer"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn github-btn"
+      >
+        <i className="fab fa-github"></i>
+      </a>
       <h1 className="timer mb-3">
         <span>{formatTwoDigits(minutes)}</span>
         {":"}
         <span>{formatTwoDigits(seconds)}</span>
       </h1>
-      <div className="progress w-100 mt-3 ">
-        <div
-          className="progress-bar"
-          role="progressbar"
-          style={{ width: `${getPercentage(minutes, seconds)}%` }}
-        ></div>
-      </div>
-      <div className="milestone-container">
-        {milestones.map((milestone, index) => (
-          <React.Fragment key={index}>
-            <div
-              className="milestone-bar"
-              style={{ right: `${getMilestonePercentage(milestone.minutes)}%` }}
-            />
-            <div
-              className="milestone-point d-flex flex-column align-items-center justify-content-center"
-              style={{ right: `${getMilestonePercentage(milestone.minutes)}%` }}
-            >
-              <div className="d-flex align-items-center">
-                <i className="fas fa-caret-left me-1"></i>
-                {milestone.text}
-              </div>
-              <div className="milestone-min">{milestone.minutes} min</div>
-            </div>
-          </React.Fragment>
-        ))}
+      <div className="px-5 w-100">
+        <div className="progress w-100 mt-3 ">
+          <div
+            className="progress-bar"
+            role="progressbar"
+            style={{ width: `${currentPercent}%` }}
+          ></div>
+        </div>
+        <div className="milestone-container">
+          {sortedMilestones.map((milestone, index) => {
+            return (
+              <Milestone
+                key={index}
+                index={index}
+                milestone={milestone}
+                currentPercent={currentPercent}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );
